@@ -112,6 +112,8 @@
     .qty-wrap { position: relative; }
     input.qty-input { font-size: 28px; font-weight: 800; text-align: center; color: #1a73e8; padding: 16px; border-radius: 16px; }
     .qty-unit { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 13px; font-weight: 600; color: #aaa; }
+    .qty-done-btn { width: 100%; padding: 12px; margin-top: 10px; background: #e8f0fe; color: #1a73e8; border: 2px solid #1a73e8; border-radius: 12px; font-size: 14px; font-weight: 700; font-family: 'Noto Sans Thai', sans-serif; cursor: pointer; display: none; }
+    .qty-done-btn.visible { display: block; }
 
     /* CONFIRM */
     .confirm-card { background: #f8f9ff; border: 2px solid #e8f0fe; border-radius: 16px; padding: 16px; }
@@ -277,9 +279,14 @@
       </div>
       <div class="step-body">
         <div class="qty-wrap">
-          <input class="qty-input" type="number" id="qty" placeholder="0" min="0" step="0.01" inputmode="decimal" oninput="onQtyInput()" onblur="onQtyBlur()" onkeydown="if(event.key==='Enter'){onQtyBlur();event.target.blur();}">
+          <input class="qty-input" type="number" id="qty" placeholder="0" min="0" step="0.01" inputmode="decimal"
+            oninput="onQtyInput()"
+            onfocus="document.getElementById('qty-done-btn').classList.add('visible')"
+            onblur="onQtyBlur()"
+            onkeydown="if(event.key==='Enter'){onQtyBlur();event.target.blur();}">
           <div class="qty-unit" id="qty-unit"></div>
         </div>
+        <button class="qty-done-btn" id="qty-done-btn" onclick="onQtyDone()">✓ ยืนยันจำนวน</button>
         <div id="reason-wrap" class="hidden" style="margin-top:14px;">
           <div class="field-label">เหตุผลที่นำออก</div>
           <div class="pill-row" id="reason-pills"></div>
@@ -315,7 +322,7 @@
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpTW6297O_iP8bIWxu_8KSzUE2MnHeU_CwDSEBOvZbbemH7sk4NKDAtJCY_GkuzITi/exec';
 const LIFF_ID = '2010076946-hXx9D9XU';
-const VERSION = '1.5.4'; // three-step font size toggle
+const VERSION = '1.5.5'; // qty done button
 
 // Different building/place icons so each location looks distinct
 const LOC_ICONS = [
@@ -630,6 +637,12 @@ function onQtyInput() {
     document.getElementById('ss-qty').textContent = qty + ' ' + state.unit;
   }
   checkSaveButton();
+}
+
+function onQtyDone() {
+  document.getElementById('qty-done-btn').classList.remove('visible');
+  document.getElementById('qty').blur();
+  onQtyBlur();
 }
 
 function onQtyBlur() {
