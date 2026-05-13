@@ -13,20 +13,39 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body { font-family: 'Noto Sans Thai', sans-serif; background: #1a73e8; min-height: 100vh; overflow-x: hidden; }
-    body.large-font .step-title { font-size: 18px; }
-    body.large-font .step-summary { font-size: 16px; }
-    body.large-font .step-number { width: 34px; height: 34px; font-size: 15px; }
-    body.large-font .tap-label { font-size: 16px; }
-    body.large-font .pill { font-size: 17px; padding: 10px 20px; }
-    body.large-font select, body.large-font input[type=number], body.large-font input[type=text] { font-size: 18px; padding: 14px; }
-    body.large-font input.qty-input { font-size: 36px; }
-    body.large-font .confirm-row { font-size: 16px; padding: 12px 0; }
-    body.large-font .confirm-action { font-size: 18px; }
-    body.large-font .field-label { font-size: 14px; }
-    body.large-font .btn-cancel, body.large-font .btn-save { font-size: 17px; padding: 16px; }
-    body.large-font .action-btn .lbl { font-size: 14px; }
-    body.large-font .action-btn .ms { font-size: 28px; }
-    body.large-font .tap-card .ms { font-size: 32px; }
+    body.medium-font .step-title { font-size: 18px; }
+    body.medium-font .step-summary { font-size: 16px; }
+    body.medium-font .step-number { width: 34px; height: 34px; font-size: 15px; }
+    body.medium-font .tap-label { font-size: 16px; }
+    body.medium-font .pill { font-size: 17px; padding: 10px 20px; }
+    body.medium-font select, body.medium-font input[type=number], body.medium-font input[type=text] { font-size: 18px; padding: 14px; }
+    body.medium-font input.qty-input { font-size: 36px; }
+    body.medium-font .confirm-row { font-size: 16px; padding: 12px 0; }
+    body.medium-font .confirm-action { font-size: 18px; }
+    body.medium-font .field-label { font-size: 14px; }
+    body.medium-font .btn-cancel, body.medium-font .btn-save { font-size: 17px; padding: 16px; }
+    body.medium-font .action-btn .lbl { font-size: 14px; }
+    body.medium-font .action-btn .ms { font-size: 28px; }
+    body.medium-font .tap-card .ms { font-size: 32px; }
+    body.medium-font .tap-card { padding: 18px 8px 14px; }
+
+    body.large-font .step-title { font-size: 22px; }
+    body.large-font .step-summary { font-size: 19px; }
+    body.large-font .step-number { width: 40px; height: 40px; font-size: 18px; }
+    body.large-font .tap-label { font-size: 20px; }
+    body.large-font .pill { font-size: 20px; padding: 12px 24px; }
+    body.large-font select, body.large-font input[type=number], body.large-font input[type=text] { font-size: 22px; padding: 16px; }
+    body.large-font input.qty-input { font-size: 44px; }
+    body.large-font .confirm-row { font-size: 20px; padding: 14px 0; }
+    body.large-font .confirm-action { font-size: 22px; }
+    body.large-font .field-label { font-size: 17px; }
+    body.large-font .btn-cancel, body.large-font .btn-save { font-size: 20px; padding: 18px; }
+    body.large-font .action-btn .lbl { font-size: 16px; }
+    body.large-font .action-btn .ms { font-size: 32px; }
+    body.large-font .tap-card .ms { font-size: 38px; }
+    body.large-font .tap-card { padding: 22px 8px 18px; }
+    body.large-font .step-header { padding: 20px; }
+    body.large-font .sheet-handle { margin-bottom: 28px; }
     .font-toggle { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.2); border: 1.5px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 6px 12px; display: flex; align-items: center; gap: 6px; cursor: pointer; color: #fff; font-size: 13px; font-weight: 700; font-family: 'Noto Sans Thai', sans-serif; transition: all 0.2s; }
     .font-toggle:active { background: rgba(255,255,255,0.35); transform: scale(0.96); }
     .font-toggle .ms { font-size: 18px; color: #fff; }
@@ -148,7 +167,7 @@
   <div class="top-header">
     <button class="font-toggle" onclick="toggleFont()" id="font-toggle-btn">
       <span class="ms">text_fields</span>
-      <span id="font-toggle-label">ขนาดใหญ่</span>
+      <span id="font-toggle-label">S → M → L</span>
     </button>
     <div class="top-meta">Stock Management</div>
     <div class="top-title">บันทึกสต็อก</div>
@@ -296,7 +315,7 @@
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpTW6297O_iP8bIWxu_8KSzUE2MnHeU_CwDSEBOvZbbemH7sk4NKDAtJCY_GkuzITi/exec';
 const LIFF_ID = '2010076946-hXx9D9XU';
-const VERSION = '1.5.2'; // new domain kimchiang-ltd.github.io/stock
+const VERSION = '1.5.4'; // three-step font size toggle
 
 // Different building/place icons so each location looks distinct
 const LOC_ICONS = [
@@ -346,7 +365,7 @@ async function init() {
     const data = await res.json();
 
     if (!data.success) {
-      document.getElementById('loading').innerHTML = `<div style="text-align:center;padding:32px"><div style="font-size:48px;margin-bottom:16px">⚠️</div><div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:8px">ยังไม่ได้ลงทะเบียน</div><div style="font-size:12px;color:rgba(255,255,255,0.7)">กรุณาติดต่อผู้จัดการ<br><br>${currentUserId}</div></div>`;
+      document.getElementById('loading').innerHTML = `<div style="text-align:center;padding:32px"><div style="font-size:48px;margin-bottom:16px">⚠️</div><div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:12px">ยังไม่ได้รับสิทธิ์เข้าใช้งาน</div><div style="font-size:13px;color:rgba(255,255,255,0.85);line-height:1.8">กรุณาพิมพ์<br><span style="background:rgba(255,255,255,0.2);padding:4px 12px;border-radius:8px;font-weight:700;">"ขอสิทธิ์"</span><br>ในแชท LINE<br>เพื่อติดต่อ Admin</div></div>`;
       return;
     }
 
@@ -702,16 +721,36 @@ function resetForm() {
 }
 
 function toggleFont() {
-  const isLarge = document.body.classList.toggle('large-font');
-  document.getElementById('font-toggle-label').textContent = isLarge ? 'ขนาดปกติ' : 'ขนาดใหญ่';
-  try { localStorage.setItem('largefont', isLarge ? '1' : '0'); } catch(e) {}
+  const body = document.body;
+  const btn = document.getElementById('font-toggle-label');
+  if (body.classList.contains('large-font')) {
+    body.classList.remove('large-font');
+    btn.textContent = 'S → M → L';
+    try { localStorage.setItem('fontsize', 'small'); } catch(e) {}
+  } else if (body.classList.contains('medium-font')) {
+    body.classList.remove('medium-font');
+    body.classList.add('large-font');
+    btn.textContent = 'ใหญ่มาก';
+    try { localStorage.setItem('fontsize', 'large'); } catch(e) {}
+  } else {
+    body.classList.add('medium-font');
+    btn.textContent = 'ใหญ่';
+    try { localStorage.setItem('fontsize', 'medium'); } catch(e) {}
+  }
 }
 
 function applyFontPreference() {
   try {
-    if (localStorage.getItem('largefont') === '1') {
+    const size = localStorage.getItem('fontsize');
+    const btn = document.getElementById('font-toggle-label');
+    if (size === 'medium') {
+      document.body.classList.add('medium-font');
+      btn.textContent = 'ใหญ่';
+    } else if (size === 'large') {
       document.body.classList.add('large-font');
-      document.getElementById('font-toggle-label').textContent = 'ขนาดปกติ';
+      btn.textContent = 'ใหญ่มาก';
+    } else {
+      btn.textContent = 'S → M → L';
     }
   } catch(e) {}
 }
