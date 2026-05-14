@@ -323,7 +323,7 @@
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpTW6297O_iP8bIWxu_8KSzUE2MnHeU_CwDSEBOvZbbemH7sk4NKDAtJCY_GkuzITi/exec';
 const LIFF_ID = '2010076946-hXx9D9XU';
-const VERSION = '1.5.6'; // version top left, history top right
+const VERSION = '1.5.7'; // request access button
 
 // Different building/place icons so each location looks distinct
 const LOC_ICONS = [
@@ -373,7 +373,16 @@ async function init() {
     const data = await res.json();
 
     if (!data.success) {
-      document.getElementById('loading').innerHTML = `<div style="text-align:center;padding:32px"><div style="font-size:48px;margin-bottom:16px">⚠️</div><div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:12px">ยังไม่ได้รับสิทธิ์เข้าใช้งาน</div><div style="font-size:13px;color:rgba(255,255,255,0.85);line-height:1.8">กรุณาพิมพ์<br><span style="background:rgba(255,255,255,0.2);padding:4px 12px;border-radius:8px;font-weight:700;">"ขอสิทธิ์"</span><br>ในแชท LINE<br>เพื่อติดต่อ Admin</div></div>`;
+      document.getElementById('loading').innerHTML = `
+        <div style="text-align:center;padding:32px">
+          <div style="font-size:48px;margin-bottom:16px">⚠️</div>
+          <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:8px">ยังไม่ได้รับสิทธิ์เข้าใช้งาน</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.8);margin-bottom:24px;line-height:1.8">กรุณากดปุ่มด้านล่างเพื่อขอสิทธิ์จาก Admin</div>
+          <button onclick="requestAccess()" style="background:#fff;color:#1a73e8;border:none;border-radius:12px;padding:14px 28px;font-size:15px;font-weight:700;font-family:'Noto Sans Thai',sans-serif;cursor:pointer;display:flex;align-items:center;gap:8px;margin:0 auto;">
+            <span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;">send</span>
+            ขอสิทธิ์เข้าใช้งาน
+          </button>
+        </div>`;
       return;
     }
 
@@ -394,6 +403,20 @@ function openHistory() {
     liff.openWindow({ url: url, external: false });
   } else {
     window.open(url, '_blank');
+  }
+}
+
+async function requestAccess() {
+  try {
+    await liff.sendMessages([{ type: 'text', text: 'ขอสิทธิ์' }]);
+    document.getElementById('loading').innerHTML = `
+      <div style="text-align:center;padding:32px">
+        <div style="font-size:48px;margin-bottom:16px">📝</div>
+        <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:8px">ส่งคำขอแล้ว!</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.8);line-height:1.8">Admin จะเพิ่มสิทธิ์ให้คุณโดยเร็ว<br>กรุณารอสักครู่ 🙏</div>
+      </div>`;
+  } catch(err) {
+    alert('เกิดข้อผิดพลาด: ' + err.message);
   }
 }
 
