@@ -169,22 +169,23 @@
   <div class="top-header">
     <button class="font-toggle" onclick="toggleFont()" id="font-toggle-btn">
       <span class="ms">text_fields</span>
-      <span id="font-toggle-label">S → M → L</span>
+      <span id="font-toggle-label"></span>
     </button>
+    <div style="position:absolute;top:16px;left:16px;font-size:10px;color:rgba(255,255,255,0.45);font-weight:600;letter-spacing:0.5px;">v<span id="version-display"></span></div>
     <div class="top-meta">Stock Management</div>
     <div class="top-title">บันทึกสต็อก</div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-      <div class="user-badge">
-        <span class="ms" style="font-size:16px;color:rgba(255,255,255,0.8)">person</span>
-        <span id="user-name-badge">กำลังโหลด...</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <button onclick="openHistory()" style="background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);border-radius:20px;padding:5px 12px;display:flex;align-items:center;gap:5px;cursor:pointer;color:#fff;font-size:12px;font-weight:700;font-family:'Noto Sans Thai',sans-serif;">
-          <span class="ms" style="font-size:16px;color:#fff">history</span>
-          ประวัติ
-        </button>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="user-badge">
+          <span class="ms" style="font-size:16px;color:rgba(255,255,255,0.8)">person</span>
+          <span id="user-name-badge">กำลังโหลด...</span>
+        </div>
         <div style="font-size:10px;color:rgba(255,255,255,0.45);font-weight:600;letter-spacing:0.5px;">v<span id="version-display"></span></div>
       </div>
+      <button onclick="openHistory()" style="background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);border-radius:20px;padding:5px 12px;display:flex;align-items:center;gap:5px;cursor:pointer;color:#fff;font-size:12px;font-weight:700;font-family:'Noto Sans Thai',sans-serif;">
+        <span class="ms" style="font-size:16px;color:#fff">history</span>
+        ประวัติ
+      </button>
     </div>
     <div class="action-row">
       <div class="action-btn active" id="btn-IN" onclick="selectAction('IN')">
@@ -322,7 +323,7 @@
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpTW6297O_iP8bIWxu_8KSzUE2MnHeU_CwDSEBOvZbbemH7sk4NKDAtJCY_GkuzITi/exec';
 const LIFF_ID = '2010076946-hXx9D9XU';
-const VERSION = '1.5.5'; // qty done button
+const VERSION = '1.5.6'; // version top left, history top right
 
 // Different building/place icons so each location looks distinct
 const LOC_ICONS = [
@@ -738,16 +739,13 @@ function toggleFont() {
   const btn = document.getElementById('font-toggle-label');
   if (body.classList.contains('large-font')) {
     body.classList.remove('large-font');
-    btn.textContent = 'S → M → L';
     try { localStorage.setItem('fontsize', 'small'); } catch(e) {}
   } else if (body.classList.contains('medium-font')) {
     body.classList.remove('medium-font');
     body.classList.add('large-font');
-    btn.textContent = 'ใหญ่มาก';
     try { localStorage.setItem('fontsize', 'large'); } catch(e) {}
   } else {
     body.classList.add('medium-font');
-    btn.textContent = 'ใหญ่';
     try { localStorage.setItem('fontsize', 'medium'); } catch(e) {}
   }
 }
@@ -755,15 +753,10 @@ function toggleFont() {
 function applyFontPreference() {
   try {
     const size = localStorage.getItem('fontsize');
-    const btn = document.getElementById('font-toggle-label');
     if (size === 'medium') {
       document.body.classList.add('medium-font');
-      btn.textContent = 'ใหญ่';
     } else if (size === 'large') {
       document.body.classList.add('large-font');
-      btn.textContent = 'ใหญ่มาก';
-    } else {
-      btn.textContent = 'S → M → L';
     }
   } catch(e) {}
 }
