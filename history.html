@@ -13,7 +13,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body { font-family: 'Noto Sans Thai', sans-serif; background: #1a73e8; min-height: 100vh; }
     .ms { font-family: 'Material Symbols Rounded'; font-size: 22px; vertical-align: middle; line-height: 1; }
-
     .top-header { padding: 20px 20px 70px; background: linear-gradient(160deg, #1557b0 0%, #1a73e8 50%, #2196f3 100%); position: relative; overflow: hidden; }
     .top-header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: rgba(255,255,255,0.06); border-radius: 50%; pointer-events: none; }
     .top-meta { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.65); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; margin-top: 48px; }
@@ -21,15 +20,12 @@
     .top-sub { font-size: 13px; color: rgba(255,255,255,0.7); }
     .back-btn { display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.2); border: 1.5px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 6px 14px; cursor: pointer; color: #fff; font-size: 13px; font-weight: 700; font-family: 'Noto Sans Thai', sans-serif; position: relative; z-index: 10; }
     .back-btn .ms { font-size: 18px; }
-
     .sheet { background: #fff; border-radius: 24px 24px 0 0; min-height: calc(100vh - 180px); margin-top: -24px; padding: 20px 0 40px; }
     .sheet-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 20px; }
-
     .loading { text-align: center; padding: 40px; color: #aaa; font-size: 14px; }
     .empty { text-align: center; padding: 60px 20px; color: #aaa; }
     .empty .ms { font-size: 48px; display: block; margin-bottom: 12px; color: #ddd; }
     .empty-text { font-size: 15px; font-weight: 600; color: #bbb; }
-
     .history-item { padding: 14px 20px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 14px; }
     .history-item:last-child { border-bottom: none; }
     .action-badge { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -44,19 +40,16 @@
     .badge-MOVE .ms { color: #6a1b9a; }
     .badge-PROD { background: #fce4ec; }
     .badge-PROD .ms { color: #880e4f; }
-
     .history-info { flex: 1; min-width: 0; }
     .history-item-name { font-size: 14px; font-weight: 700; color: #111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .history-item-detail { font-size: 12px; color: #888; margin-top: 2px; }
     .history-right { text-align: right; flex-shrink: 0; }
     .history-qty { font-size: 15px; font-weight: 800; color: #1a73e8; }
     .history-time { font-size: 11px; color: #bbb; margin-top: 2px; }
-
     .section-date { padding: 8px 20px; background: #f8f9ff; font-size: 11px; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #f0f0f0; }
   </style>
 </head>
 <body>
-
 <div class="top-header">
   <button class="back-btn" onclick="goBack()">
     <span class="ms">arrow_back</span>
@@ -66,7 +59,6 @@
   <div class="top-title">ประวัติการบันทึก</div>
   <div class="top-sub">20 รายการล่าสุดของคุณ</div>
 </div>
-
 <div class="sheet">
   <div class="sheet-handle"></div>
   <div id="content">
@@ -76,10 +68,8 @@
     </div>
   </div>
 </div>
-
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpTW6297O_iP8bIWxu_8KSzUE2MnHeU_CwDSEBOvZbbemH7sk4NKDAtJCY_GkuzITi/exec';
-
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxiLHP7ZT5oyljLlE1cUAlBJkYgNvmBVcUYeRaQldlmMTmrXe1JiLAMNt_1AR7k756s/exec';
 const ACTION_CONFIG = {
   'IN':       { icon: 'move_to_inbox', badge: 'badge-IN',    label: 'นำเข้า' },
   'OUT':      { icon: 'outbox',        badge: 'badge-OUT',   label: 'นำออก' },
@@ -89,18 +79,15 @@ const ACTION_CONFIG = {
   'PROD-OUT': { icon: 'precision_manufacturing', badge: 'badge-PROD', label: 'ผลิต (ออก)' },
   'PROD-IN':  { icon: 'precision_manufacturing', badge: 'badge-PROD', label: 'ผลิต (เข้า)' },
 };
-
 function goBack() {
   const formUrl = 'https://kimchiang-ltd.github.io/stock/';
   const params = new URLSearchParams(window.location.search);
   const userId = params.get('userId');
   window.location.href = formUrl + (userId ? '?userId=' + userId : '');
 }
-
 async function loadHistory() {
   const params = new URLSearchParams(window.location.search);
   const userId = params.get('userId');
-
   if (!userId) {
     document.getElementById('content').innerHTML = `
       <div class="empty">
@@ -109,11 +96,9 @@ async function loadHistory() {
       </div>`;
     return;
   }
-
   try {
     const res = await fetch(`${APPS_SCRIPT_URL}?action=getHistory&userId=${userId}`);
     const data = await res.json();
-
     if (!data.success || data.history.length === 0) {
       document.getElementById('content').innerHTML = `
         <div class="empty">
@@ -122,10 +107,8 @@ async function loadHistory() {
         </div>`;
       return;
     }
-
     let html = '';
     let lastDate = '';
-
     data.history.forEach(row => {
       // Extract date part for grouping
       const dateStr = row.time.split(' ')[0];
@@ -133,11 +116,9 @@ async function loadHistory() {
         html += `<div class="section-date">${dateStr}</div>`;
         lastDate = dateStr;
       }
-
       const cfg = ACTION_CONFIG[row.action] || { icon: 'circle', badge: 'badge-IN', label: row.action };
       const itemLabel = [row.itemName, row.variation].filter(Boolean).join(' ');
       const detail = [row.family, row.location, row.note].filter(Boolean).join(' · ');
-
       html += `
         <div class="history-item">
           <div class="action-badge ${cfg.badge}">
@@ -153,9 +134,7 @@ async function loadHistory() {
           </div>
         </div>`;
     });
-
     document.getElementById('content').innerHTML = html;
-
   } catch(err) {
     document.getElementById('content').innerHTML = `
       <div class="empty">
@@ -164,7 +143,6 @@ async function loadHistory() {
       </div>`;
   }
 }
-
 loadHistory();
 </script>
 </body>
